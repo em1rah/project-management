@@ -1,26 +1,14 @@
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container-fluid p-4">
+<div>
     <!-- Header Section -->
-    <div class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-                <h1 class="display-5 fw-bold text-dark mb-2">📊 Admin Dashboard</h1>
-                <p class="text-muted fs-6">Welcome, <strong>@ViewBag.AdminName</strong> | Last updated: <span id="lastUpdated">Just now</span></p>
-            </div>
-            <div>
-                <a href="@Url.Action("Users", "Admin")" class="btn btn-primary btn-lg me-2 fw-bold">
-                    👥 Manage Users
-                </a>
-                <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger btn-lg fw-bold">
-                    🚪 Logout
-                </a>
-            </div>
-        </div>
+    <div class="page-header">
+        <h1 class="display-6 fw-bold text-dark mb-2">Dashboard</h1>
+        <p class="text-muted">Welcome back! Here's your overview.</p>
     </div>
-
     <!-- Statistics Cards -->
     <div class="row mb-4 g-3">
         <div class="col-xl-3 col-md-6">
@@ -150,163 +138,175 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-        // Update last updated time
-        const now = new Date();
-        document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
-
-        // Chart color schemes
-        const colors = {
-            primary: '#667eea',
-            secondary: '#764ba2',
-            success: '#28a745',
-            danger: '#dc3545',
-            info: '#0dcaf0'
-        };
-
-        // Certification Chart
-        const certCtx = document.getElementById('certificationChart').getContext('2d');
-        const certChart = new Chart(certCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Interested in Certification', 'Not Interested'],
-                datasets: [{
-                    data: [@ViewBag.CertificationInterested, @ViewBag.CertificationNotInterested],
-                    backgroundColor: [
-                        '#28a745',
-                        '#dc3545'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 3,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: { size: 13, weight: 'bold' },
-                            padding: 20,
-                            usePointStyle: true
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = Math.round((context.parsed * 100) / total);
-                                return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Certification Chart
+            try {
+                const certCtx = document.getElementById('certificationChart');
+                if (certCtx) {
+                    const certChart = new Chart(certCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Interested in Certification', 'Not Interested'],
+                            datasets: [{
+                                data: [@ViewBag.CertificationInterested, @ViewBag.CertificationNotInterested],
+                                backgroundColor: [
+                                    '#28a745',
+                                    '#dc3545'
+                                ],
+                                borderColor: '#fff',
+                                borderWidth: 3,
+                                hoverOffset: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        font: { size: 13, weight: 'bold' },
+                                        padding: 20,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = Math.round((context.parsed * 100) / total);
+                                            return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
+                    });
                 }
+            } catch(e) {
+                console.error('Error initializing certification chart:', e);
             }
-        });
 
-        // Roles Chart
-        const roles = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RoleDistribution ?? new List<object>()));
-        const roleLabels = roles.map(r => r.role);
-        const roleCounts = roles.map(r => r.count);
+            // Roles Chart
+            try {
+                const roles = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RoleDistribution ?? new List<object>(), new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = null }));
+                console.log('Roles data:', roles);
+                if (roles && roles.length > 0) {
+                    const roleLabels = roles.map(r => r.Role);
+                    const roleCounts = roles.map(r => r.Count);
 
-        const rolesCtx = document.getElementById('rolesChart').getContext('2d');
-        const rolesChart = new Chart(rolesCtx, {
-            type: 'bar',
-            data: {
-                labels: roleLabels,
-                datasets: [{
-                    label: 'Number of Users',
-                    data: roleCounts,
-                    backgroundColor: [
-                        '#667eea',
-                        '#764ba2',
-                        '#0dcaf0',
-                        '#28a745',
-                        '#ffc107'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 2,
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        labels: { font: { size: 13, weight: 'bold' }, padding: 15 }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        padding: 12,
-                        titleFont: { size: 13, weight: 'bold' },
-                        bodyFont: { size: 12 }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        ticks: { font: { size: 12 } },
-                        grid: { color: 'rgba(0,0,0,0.05)' }
-                    },
-                    y: {
-                        ticks: { font: { size: 12, weight: '500' } },
-                        grid: { display: false }
+                    const rolesCtx = document.getElementById('rolesChart');
+                    if (rolesCtx) {
+                        const rolesChart = new Chart(rolesCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: roleLabels,
+                                datasets: [{
+                                    label: 'Number of Users',
+                                    data: roleCounts,
+                                    backgroundColor: [
+                                        '#667eea',
+                                        '#764ba2',
+                                        '#0dcaf0',
+                                        '#28a745',
+                                        '#ffc107'
+                                    ],
+                                    borderColor: '#fff',
+                                    borderWidth: 2,
+                                    borderRadius: 8
+                                }]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        labels: { font: { size: 13, weight: 'bold' }, padding: 15 }
+                                    },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(0,0,0,0.8)',
+                                        padding: 12,
+                                        titleFont: { size: 13, weight: 'bold' },
+                                        bodyFont: { size: 12 }
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        beginAtZero: true,
+                                        ticks: { font: { size: 12 } },
+                                        grid: { color: 'rgba(0,0,0,0.05)' }
+                                    },
+                                    y: {
+                                        ticks: { font: { size: 12, weight: '500' } },
+                                        grid: { display: false }
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
+            } catch(e) {
+                console.error('Error initializing roles chart:', e);
             }
-        });
 
-        // Courses Chart
-        const courses = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Courses ?? new Dictionary<string, int>()));
-        const courseLabels = Object.keys(courses);
-        const courseCounts = Object.values(courses);
+            // Courses Chart
+            try {
+                const courses = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Courses ?? new Dictionary<string, int>()));
+                console.log('Courses data:', courses);
+                if (courses && Object.keys(courses).length > 0) {
+                    const courseLabels = Object.keys(courses);
+                    const courseCounts = Object.values(courses);
 
-        const coursesCtx = document.getElementById('coursesChart').getContext('2d');
-        const coursesChart = new Chart(coursesCtx, {
-            type: 'bar',
-            data: {
-                labels: courseLabels,
-                datasets: [{
-                    label: 'Number of Registrations',
-                    data: courseCounts,
-                    backgroundColor: 'linear-gradient(to bottom, #28a745, #20c997)',
-                    borderColor: '#20c997',
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'x',
-                plugins: {
-                    legend: {
-                        display: true,
-                        labels: { font: { size: 13, weight: 'bold' }, padding: 15 }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        padding: 12,
-                        titleFont: { size: 13, weight: 'bold' },
-                        bodyFont: { size: 12 }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: { font: { size: 12, weight: '500' } },
-                        grid: { color: 'rgba(0,0,0,0.05)' }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        ticks: { font: { size: 12 } },
-                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    const coursesCtx = document.getElementById('coursesChart');
+                    if (coursesCtx) {
+                        const coursesChart = new Chart(coursesCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: courseLabels,
+                                datasets: [{
+                                    label: 'Number of Registrations',
+                                    data: courseCounts,
+                                    backgroundColor: '#28a745',
+                                    borderColor: '#20c997',
+                                    borderWidth: 2,
+                                    borderRadius: 8
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                indexAxis: 'x',
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        labels: { font: { size: 13, weight: 'bold' }, padding: 15 }
+                                    },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(0,0,0,0.8)',
+                                        padding: 12,
+                                        titleFont: { size: 13, weight: 'bold' },
+                                        bodyFont: { size: 12 }
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        ticks: { font: { size: 12, weight: '500' } },
+                                        grid: { color: 'rgba(0,0,0,0.05)' }
+                                    },
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: { font: { size: 12 } },
+                                        grid: { color: 'rgba(0,0,0,0.05)' }
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
+            } catch(e) {
+                console.error('Error initializing courses chart:', e);
             }
         });
     </script>
