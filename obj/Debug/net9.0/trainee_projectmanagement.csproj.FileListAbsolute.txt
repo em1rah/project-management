@@ -170,7 +170,6 @@ C:\projects\trainee_projectmanagement\obj\Debug\net9.0\compressed\483cg7zybl-2z0
 C:\projects\trainee_projectmanagement\obj\Debug\net9.0\compressed\safishh35s-muycvpuwrr.gz
 C:\projects\trainee_projectmanagement\obj\Debug\net9.0\compressed\0bt5x50r3g-87fc7y1x7t.gz
 C:\projects\trainee_projectmanagement\obj\Debug\net9.0\compressed\ydelrm0d61-mlv21k5csn.gz
-C:\projects\trainee_projectmanagement\obj\Debug\net9.0\compressed\xuji69kfgp-xs2ko70j6c.gz
 C:\projects\trainee_projectmanagement\obj\Debug\net9.0\compressed\tcnqcn2a33-eqao7gr3oy.gz
 C:\projects\trainee_projectmanagement\obj\Debug\net9.0\compressed\bhifc2kmh2-eqao7gr3oy.gz
 C:\projects\trainee_projectmanagement\obj\Debug\net9.0\staticwebassets.build.json
@@ -209,3 +208,5 @@ C:\projects\trainee_projectmanagement\bin\Debug\net9.0\runtimes\win-arm\native\e
 C:\projects\trainee_projectmanagement\bin\Debug\net9.0\runtimes\win-arm64\native\e_sqlite3.dll
 C:\projects\trainee_projectmanagement\bin\Debug\net9.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\projects\trainee_projectmanagement\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\projects\trainee_projectmanagement\obj\Debug\net9.0\trainee_projectmanagement.sourcelink.json
+C:\projects\trainee_projectmanagement\obj\Debug\net9.0\compressed\xuji69kfgp-5tdk5qc9je.gz

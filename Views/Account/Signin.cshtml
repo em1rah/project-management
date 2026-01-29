@@ -2,51 +2,71 @@
     ViewData["Title"] = "Sign In";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <h2 class="text-center mb-4">Sign In</h2>
-                    
-                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Count > 0)
-                    {
-                        <div class="alert alert-danger" role="alert">
-                            @foreach (var modelState in ViewData.ModelState.Values)
-                            {
-                                @foreach (var error in modelState.Errors)
+<div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-body p-5">
+                        <!-- Header -->
+                        <div class="text-center mb-5">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
+                            <h2 class="fw-bold text-dark">Welcome Back</h2>
+                            <p class="text-muted mt-2">Sign in to access your dashboard</p>
+                        </div>
+                        
+                        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Count > 0)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong>
+                                @foreach (var modelState in ViewData.ModelState.Values)
                                 {
-                                    <p>@error.ErrorMessage</p>
+                                    @foreach (var error in modelState.Errors)
+                                    {
+                                        <div>@error.ErrorMessage</div>
+                                    }
                                 }
-                            }
-                        </div>
-                    }
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
 
-                    <form method="post" asp-action="Signin" asp-controller="Account">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email Address</label>
-                            <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email" required />
-                        </div>
+                        <form method="post" asp-action="Signin" asp-controller="Account">
+                            <div class="mb-4">
+                                <label for="email" class="form-label fw-semibold">📧 Email Address</label>
+                                <input type="email" name="email" id="email" class="form-control form-control-lg border-2" 
+                                       placeholder="you@example.com" required style="border-color: #e0e0e0;" />
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Enter password" required />
-                        </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-semibold">🔑 Password</label>
+                                <input type="password" name="password" id="password" class="form-control form-control-lg border-2" 
+                                       placeholder="Enter your password" required style="border-color: #e0e0e0;" />
+                            </div>
 
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
-                        </div>
+                            <div class="d-grid gap-2 mt-5">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 0.75rem;">
+                                    Sign In
+                                </button>
+                            </div>
 
-                        <p class="text-center mt-3">
-                            Don't have an account? <a asp-action="Signup" asp-controller="Account" class="text-decoration-none">Sign Up</a>
-                        </p>
+                            <hr class="my-4" />
 
-                        <div class="alert alert-info mt-3" role="alert">
-                            <strong>Demo Credentials:</strong><br/>
-                            Email: admiranda@sscgi.com<br/>
-                            Password: M!rand@22
+                            <p class="text-center text-muted">
+                                Don't have an account? <a asp-action="Signup" asp-controller="Account" class="fw-bold text-decoration-none" style="color: #667eea;">Sign Up here</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Demo Credentials Card -->
+                <div class="card mt-4 border-0 shadow" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
+                    <div class="card-body p-4">
+                        <h6 class="card-title fw-bold text-dark mb-3">📋 Demo Admin Credentials</h6>
+                        <div class="small">
+                            <p class="mb-2"><strong>Email:</strong> <code class="bg-light px-2 py-1 rounded">admiranda@sscgi.com</code></p>
+                            <p class="mb-0"><strong>Password:</strong> <code class="bg-light px-2 py-1 rounded">M!rand@22</code></p>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

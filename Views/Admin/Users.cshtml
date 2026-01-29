@@ -4,80 +4,153 @@
     ViewData["Title"] = "Users List";
 }
 
-<div class="container-fluid mt-4">
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <h1 class="display-5">Registered Users</h1>
-            <p class="text-muted">Total: @Model.Count users</p>
+<div class="container-fluid p-4">
+    <!-- Header Section -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h1 class="display-5 fw-bold text-dark mb-2">👥 Registered Users</h1>
+                <p class="text-muted fs-6">Total: <strong>@Model.Count</strong> users registered</p>
+            </div>
+            <div>
+                <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-primary btn-lg me-2 fw-bold">
+                    📊 Back to Dashboard
+                </a>
+                <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger btn-lg fw-bold">
+                    🚪 Logout
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">Back to Dashboard</a>
-            <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Logout</a>
-        </div>
-    </div>
-
+    <!-- Users Table -->
     <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th>School</th>
-                                <th>Role</th>
-                                <th>Courses</th>
-                                <th>Certification</th>
-                                <th>Registered</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.Count == 0)
-                            {
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-gradient p-4" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);">
+                    <h5 class="text-white mb-0 fw-bold">📋 User Details</h5>
+                </div>
+                
+                @if (Model.Count == 0)
+                {
+                    <div class="card-body text-center py-5">
+                        <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">📭</div>
+                        <p class="text-muted fs-5">No users registered yet</p>
+                        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-primary mt-3">Go to Dashboard</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead style="background-color: #f8f9fa; border-bottom: 2px solid #e9ecef;">
                                 <tr>
-                                    <td colspan="7" class="text-center text-muted py-4">No users registered yet</td>
+                                    <th class="fw-bold text-dark">Full Name</th>
+                                    <th class="fw-bold text-dark">Email</th>
+                                    <th class="fw-bold text-dark">School</th>
+                                    <th class="fw-bold text-dark">Role</th>
+                                    <th class="fw-bold text-dark">Courses</th>
+                                    <th class="fw-bold text-dark">Certification</th>
+                                    <th class="fw-bold text-dark">Registered</th>
                                 </tr>
-                            }
-                            else
-                            {
+                            </thead>
+                            <tbody>
                                 @foreach (var user in Model)
                                 {
-                                    <tr>
-                                        <td><strong>@user.FullName</strong></td>
-                                        <td>@user.Email</td>
-                                        <td>@user.SchoolAttended</td>
+                                    <tr style="border-bottom: 1px solid #e9ecef;">
                                         <td>
-                                            <span class="badge bg-info">@user.Role</span>
+                                            <strong class="text-dark">@user.FullName</strong>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted small">@user.Email</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-dark">@user.SchoolAttended</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary fw-bold">@user.Role</span>
                                         </td>
                                         <td>
                                             @if (!string.IsNullOrEmpty(user.CoursesInterested))
                                             {
                                                 @foreach (var course in user.CoursesInterested.Split(","))
                                                 {
-                                                    <span class="badge bg-secondary me-1">@course.Trim()</span>
+                                                    <span class="badge bg-secondary me-1 mb-1">@course.Trim()</span>
                                                 }
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small">-</span>
                                             }
                                         </td>
                                         <td>
                                             @if (user.InterestedInCertification)
                                             {
-                                                <span class="badge bg-success">Yes</span>
+                                                <span class="badge bg-success fw-bold">✅ Yes</span>
                                             }
                                             else
                                             {
-                                                <span class="badge bg-danger">No</span>
+                                                <span class="badge bg-danger fw-bold">❌ No</span>
                                             }
                                         </td>
                                         <td>
-                                            <small>@user.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                            <small class="text-muted">
+                                                @user.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                            </small>
                                         </td>
                                     </tr>
                                 }
-                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Footer -->
+    @if (Model.Count > 0)
+    {
+        <div class="row mt-5 g-3">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center p-3">
+                    <h5 class="text-muted mb-2">Total Users</h5>
+                    <h2 class="fw-bold" style="color: #667eea;">@Model.Count</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center p-3">
+                    <h5 class="text-muted mb-2">Cert. Interested</h5>
+                    <h2 class="fw-bold" style="color: #28a745;">@Model.Count(u => u.InterestedInCertification)</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center p-3">
+                    <h5 class="text-muted mb-2">Not Interested</h5>
+                    <h2 class="fw-bold" style="color: #dc3545;">@Model.Count(u => !u.InterestedInCertification)</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center p-3">
+                    <h5 class="text-muted mb-2">Conversion Rate</h5>
+                    <h2 class="fw-bold" style="color: #0dcaf0;">@Math.Round(Model.Count(u => u.InterestedInCertification) * 100.0 / Model.Count, 1)%</h2>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa !important;
+        transition: all 0.2s ease;
+    }
+
+    .badge {
+        font-weight: 600;
+        padding: 0.5rem 0.75rem;
+    }
+</style>
                         </tbody>
                     </table>
                 </div>

@@ -2,48 +2,116 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    @if (ViewBag.IsLoggedIn)
-    {
-        <h1 class="display-4">Welcome, @ViewBag.UserName!</h1>
-        <p class="lead">You are logged in as <strong>@ViewBag.UserType</strong></p>
-        
-        <div class="mt-4">
-            <p class="fs-5">Thank you for joining us. You can now access your dashboard and explore our courses.</p>
-            <div class="mt-4">
-                <a class="btn btn-primary btn-lg me-2" href="@Url.Action("Logout", "Account")">Logout</a>
+<style>
+    .transition-hover {
+        transition: all 0.3s ease;
+    }
+    .transition-hover:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 1.5rem 3rem rgba(0,0,0,0.3) !important;
+    }
+    @@keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+</style>
+
+@if (ViewBag.IsLoggedIn)
+{
+    <div class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-white text-center">
+                    <div style="font-size: 4rem; margin-bottom: 1.5rem; animation: bounce 1s infinite;">👋</div>
+                    <h1 class="display-3 fw-bold mb-3">Welcome, @ViewBag.UserName!</h1>
+                    <p class="lead fs-5 mb-4">You are logged in as <span class="badge bg-white text-primary fw-bold px-3 py-2">@ViewBag.UserType</span></p>
+                    
+                    <div class="mt-5 mb-4">
+                        <p class="fs-6 opacity-90">Thank you for joining us. You can now access your dashboard and explore our AWS training courses.</p>
+                    </div>
+
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center mt-5">
+                        @if (ViewBag.UserType == "Admin")
+                        {
+                            <a class="btn btn-light btn-lg fw-bold px-4" href="@Url.Action("Dashboard", "Admin")" style="color: #667eea;">
+                                📊 Go to Dashboard
+                            </a>
+                        }
+                        <a class="btn btn-outline-light btn-lg fw-bold px-4" href="@Url.Action("Logout", "Account")">
+                            🚪 Logout
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    }
-    else
-    {
-        <h1 class="display-4">Welcome to Project Management</h1>
-        <p class="lead">Get started with your training journey</p>
-        
-        <div class="mt-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card mb-3 shadow">
-                        <div class="card-body">
-                            <h5 class="card-title">New User?</h5>
-                            <p class="card-text">Create an account and start learning AWS courses.</p>
-                            <a href="@Url.Action("Signup", "Account")" class="btn btn-success btn-lg">Sign Up</a>
+    </div>
+}
+else
+{
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center;">
+        <div class="container py-5">
+            <!-- Hero Section -->
+            <div class="text-white text-center mb-5">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">📚</div>
+                <h1 class="display-3 fw-bold mb-3">Welcome to Project Management</h1>
+                <p class="lead fs-5 opacity-90">Your gateway to AWS training and professional development</p>
+            </div>
+
+            <!-- Action Cards -->
+            <div class="row justify-content-center g-4 mt-5">
+                <!-- Sign Up Card -->
+                <div class="col-lg-5 col-md-6">
+                    <div class="card border-0 shadow-lg rounded-lg h-100 transition-hover">
+                        <div class="card-body p-5 text-center">
+                            <div style="font-size: 3rem; margin-bottom: 1.5rem; color: #28a745;">✨</div>
+                            <h3 class="card-title fw-bold mb-3">New User?</h3>
+                            <p class="card-text text-muted mb-4">Create your account and start your AWS learning journey with our comprehensive courses.</p>
+                            <a href="@Url.Action("Signup", "Account")" class="btn btn-success btn-lg fw-bold w-100" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border: none;">
+                                Get Started 🚀
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sign In Card -->
+                <div class="col-lg-5 col-md-6">
+                    <div class="card border-0 shadow-lg rounded-lg h-100 transition-hover">
+                        <div class="card-body p-5 text-center">
+                            <div style="font-size: 3rem; margin-bottom: 1.5rem; color: #0d6efd;">🔐</div>
+                            <h3 class="card-title fw-bold mb-3">Already Registered?</h3>
+                            <p class="card-text text-muted mb-4">Sign in to your account and access your personalized dashboard and course materials.</p>
+                            <a href="@Url.Action("Signin", "Account")" class="btn btn-primary btn-lg fw-bold w-100" style="background: linear-gradient(135deg, #0d6efd 0%, #0d5ed7 100%); border: none;">
+                                Sign In 🔑
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card shadow">
-                        <div class="card-body">
-                            <h5 class="card-title">Already have an account?</h5>
-                            <p class="card-text">Sign in to your account and access your dashboard.</p>
-                            <a href="@Url.Action("Signin", "Account")" class="btn btn-primary btn-lg">Sign In</a>
+
+            <!-- Features Section -->
+            <div class="row mt-5 pt-5">
+                <div class="col-lg-10 mx-auto">
+                    <h3 class="text-white fw-bold text-center mb-4">Why Choose Us?</h3>
+                    <div class="row g-3 text-white">
+                        <div class="col-md-4 text-center">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🎓</div>
+                            <h6 class="fw-bold">Expert Training</h6>
+                            <p class="small opacity-75">AWS certified courses</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+                            <h6 class="fw-bold">Track Progress</h6>
+                            <p class="small opacity-75">Monitor your learning journey</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🏆</div>
+                            <h6 class="fw-bold">Get Certified</h6>
+                            <p class="small opacity-75">Earn valuable certifications</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    }
-</div>
+    </div>
+
+}

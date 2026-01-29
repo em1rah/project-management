@@ -2,18 +2,49 @@
     ViewData["Title"] = "Sign Up";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <h2 class="text-center mb-4">Create Your Account</h2>
-                    
-                    <form method="post" asp-action="Signup" asp-controller="Account">
+<style>
+    .form-check-lg .form-check-input {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-top: 0.25rem;
+    }
+    .form-check-lg .form-check-label {
+        margin-left: 0.5rem;
+    }
+    .section {
+        animation: slideIn 0.3s ease;
+    }
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="min-vh-100 py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-md-9">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <!-- Header -->
+                    <div class="card-header p-4" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); border-bottom: none;">
+                        <div class="text-center text-white">
+                            <div style="font-size: 2.5rem; margin-bottom: 1rem;">✨</div>
+                            <h2 class="fw-bold mb-2">Create Your Account</h2>
+                            <p class="opacity-90">Join our AWS learning community</p>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-5">
                         @if (!ViewData.ModelState.IsValid)
                         {
-                            <div class="alert alert-danger" role="alert">
-                                <h4 class="alert-heading">Please fix the following errors:</h4>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <h5 class="alert-heading fw-bold mb-3">⚠️ Please fix the following errors:</h5>
                                 <ul class="mb-0">
                                     @foreach (var modelState in ViewData.ModelState.Values)
                                     {
@@ -23,91 +54,149 @@
                                         }
                                     }
                                 </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         }
 
-                        <div class="mb-3">
-                            <label for="fullname" class="form-label">Full Name</label>
-                            <input type="text" name="fullname" id="fullname" class="form-control form-control-lg" placeholder="Enter your full name" required />
-                        </div>
+                        <form method="post" asp-action="Signup" asp-controller="Account" id="signupForm">
+                            <!-- Section 1: Basic Info -->
+                            <div class="section mb-5">
+                                <h5 class="fw-bold text-dark mb-4">
+                                    <span class="badge bg-primary me-2">1</span> Basic Information
+                                </h5>
 
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email Address</label>
-                            <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email" required />
-                        </div>
+                                <div class="mb-3">
+                                    <label for="fullname" class="form-label fw-semibold">👤 Full Name</label>
+                                    <input type="text" name="fullname" id="fullname" class="form-control form-control-lg border-2" 
+                                           placeholder="John Doe" required style="border-color: #e0e0e0;" />
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Enter password" required />
-                        </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label fw-semibold">📧 Email Address</label>
+                                    <input type="email" name="email" id="email" class="form-control form-control-lg border-2" 
+                                           placeholder="you@example.com" required style="border-color: #e0e0e0;" />
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="confirmpassword" class="form-label">Confirm Password</label>
-                            <input type="password" name="confirmpassword" id="confirmpassword" class="form-control form-control-lg" placeholder="Confirm password" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="schoolattended" class="form-label">School Attended</label>
-                            <input type="text" name="schoolattended" id="schoolattended" class="form-control form-control-lg" placeholder="Enter your school" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Role</label>
-                            <div class="input-group mb-2">
-                                <select id="roleSelect" class="form-select form-select-lg" required>
-                                    <option value="">Select a role</option>
-                                    <option value="Business Analyst">Business Analyst</option>
-                                    <option value="Implementation Consultant">Implementation Consultant</option>
-                                    <option value="System Developer">System Developer</option>
-                                    <option value="Quality Assurance">Quality Assurance</option>
-                                    <option value="Other">Other (Specify)</option>
-                                </select>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="password" class="form-label fw-semibold">🔐 Password</label>
+                                        <input type="password" name="password" id="password" class="form-control form-control-lg border-2" 
+                                               placeholder="Enter password" required style="border-color: #e0e0e0;" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="confirmpassword" class="form-label fw-semibold">✓ Confirm Password</label>
+                                        <input type="password" name="confirmpassword" id="confirmpassword" class="form-control form-control-lg border-2" 
+                                               placeholder="Confirm password" required style="border-color: #e0e0e0;" />
+                                    </div>
+                                </div>
                             </div>
-                            <input type="hidden" name="role" id="roleInput" />
-                            <input type="text" id="customRole" class="form-control form-control-lg" placeholder="Specify your role" style="display: none;" />
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Courses Interested</label>
-                            <div class="form-check">
-                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Gen. AI" id="course1" />
-                                <label class="form-check-label" for="course1">AWS Gen. AI</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Cloud Practitioner" id="course2" />
-                                <label class="form-check-label" for="course2">AWS Cloud Practitioner</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Certified Solution Architect" id="course3" />
-                                <label class="form-check-label" for="course3">AWS Certified Solution Architect</label>
-                            </div>
-                            <div class="mt-2">
-                                <button type="button" class="btn btn-outline-primary btn-sm" id="addCourseBtn">+ Add Other Course</button>
-                            </div>
-                            <div id="otherCoursesContainer" style="margin-top: 10px;"></div>
-                            <input type="hidden" name="coursesinterested" id="coursesInput" />
-                        </div>
+                            <hr class="my-4">
 
-                        <div class="mb-3">
-                            <label class="form-label">Interested in Certification?</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="interestedincertification" value="true" id="certYes" required />
-                                <label class="form-check-label" for="certYes">Yes</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="interestedincertification" value="false" id="certNo" />
-                                <label class="form-check-label" for="certNo">No</label>
-                            </div>
-                        </div>
+                            <!-- Section 2: Education & Role -->
+                            <div class="section mb-5">
+                                <h5 class="fw-bold text-dark mb-4">
+                                    <span class="badge bg-info me-2">2</span> Education & Role
+                                </h5>
 
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
-                        </div>
+                                <div class="mb-3">
+                                    <label for="schoolattended" class="form-label fw-semibold">🏫 School Attended</label>
+                                    <input type="text" name="schoolattended" id="schoolattended" class="form-control form-control-lg border-2" 
+                                           placeholder="e.g., State University" required style="border-color: #e0e0e0;" />
+                                </div>
 
-                        <p class="text-center mt-3">
-                            Already have an account? <a asp-action="Signin" asp-controller="Account" class="text-decoration-none">Sign In</a>
-                        </p>
-                    </form>
+                                <div class="mb-3">
+                                    <label for="role" class="form-label fw-semibold">👔 Your Role</label>
+                                    <select id="roleSelect" class="form-select form-select-lg border-2" required style="border-color: #e0e0e0;">
+                                        <option value="">Select a role</option>
+                                        <option value="Business Analyst">👨‍💼 Business Analyst</option>
+                                        <option value="Implementation Consultant">🎯 Implementation Consultant</option>
+                                        <option value="System Developer">💻 System Developer</option>
+                                        <option value="Quality Assurance">✅ Quality Assurance</option>
+                                        <option value="Other">📝 Other (Specify)</option>
+                                    </select>
+                                    <input type="hidden" name="role" id="roleInput" />
+                                    <input type="text" id="customRole" class="form-control form-control-lg border-2 mt-2" 
+                                           placeholder="Specify your role" style="display: none; border-color: #e0e0e0;" />
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- Section 3: Courses & Certification -->
+                            <div class="section mb-5">
+                                <h5 class="fw-bold text-dark mb-4">
+                                    <span class="badge bg-success me-2">3</span> Courses & Certification
+                                </h5>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold d-block mb-3">📚 Courses Interested In</label>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-check form-check-lg">
+                                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Gen. AI" id="course1" />
+                                                <label class="form-check-label" for="course1">
+                                                    🤖 AWS Gen. AI
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check form-check-lg">
+                                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Cloud Practitioner" id="course2" />
+                                                <label class="form-check-label" for="course2">
+                                                    ☁️ AWS Cloud Practitioner
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check form-check-lg">
+                                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Certified Solution Architect" id="course3" />
+                                                <label class="form-check-label" for="course3">
+                                                    🏗️ AWS Solution Architect
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <button type="button" class="btn btn-sm btn-outline-primary fw-bold" id="addCourseBtn">
+                                            ➕ Add Other Course
+                                        </button>
+                                    </div>
+                                    <div id="otherCoursesContainer" class="mt-3"></div>
+                                    <input type="hidden" name="coursesinterested" id="coursesInput" />
+                                </div>
+
+                                <div class="mb-0">
+                                    <label class="form-label fw-semibold d-block mb-3">🎓 Interested in Certification?</label>
+                                    <div class="form-check form-check-lg mb-2">
+                                        <input class="form-check-input" type="radio" name="interestedincertification" value="True" id="certYes" required />
+                                        <label class="form-check-label" for="certYes">
+                                            ✅ Yes, I want to pursue certification
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-lg">
+                                        <input class="form-check-input" type="radio" name="interestedincertification" value="False" id="certNo" />
+                                        <label class="form-check-label" for="certNo">
+                                            ❌ No, just for knowledge
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="d-grid gap-2 mt-5">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 0.75rem;">
+                                    Create Account 🚀
+                                </button>
+                            </div>
+
+                            <p class="text-center text-muted mt-4 mb-0">
+                                Already have an account? <a asp-action="Signin" asp-controller="Account" class="fw-bold text-decoration-none" style="color: #667eea;">Sign In here</a>
+                            </p>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,30 +215,36 @@
             if (this.value === 'Other') {
                 customRole.style.display = 'block';
                 customRole.required = true;
-            } else {
+                customRole.focus();
+                roleInput.value = '';
+            } else if (this.value) {
                 customRole.style.display = 'none';
                 customRole.required = false;
+                customRole.value = '';
                 roleInput.value = this.value;
             }
         });
 
         // Custom role input
-        document.getElementById('customRole').addEventListener('change', function() {
+        document.getElementById('customRole').addEventListener('input', function() {
             document.getElementById('roleInput').value = this.value;
         });
 
         // Add other course
-        document.getElementById('addCourseBtn').addEventListener('click', function() {
+        document.getElementById('addCourseBtn').addEventListener('click', function(e) {
+            e.preventDefault();
             courseCount++;
             const container = document.getElementById('otherCoursesContainer');
             const div = document.createElement('div');
+            div.className = 'input-group mb-2';
             div.innerHTML = `
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control other-course" placeholder="Enter course name" />
-                    <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.parentElement.remove(); updateCourses();">Remove</button>
-                </div>
+                <input type="text" class="form-control other-course border-2" placeholder="Enter course name" style="border-color: #e0e0e0;" />
+                <button type="button" class="btn btn-outline-danger fw-bold" onclick="this.parentElement.remove(); updateCourses();">Remove</button>
             `;
             container.appendChild(div);
+            
+            // Add change listener to new course input
+            div.querySelector('.other-course').addEventListener('input', updateCourses);
         });
 
         // Update courses
@@ -163,10 +258,29 @@
                 selected.push(checkbox.value);
             });
             document.querySelectorAll('.other-course').forEach(input => {
-                if (input.value) selected.push(input.value);
+                if (input.value.trim()) selected.push(input.value.trim());
             });
             document.getElementById('coursesInput').value = selected.join(',');
         }
+
+        // Form validation
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmpassword').value;
+            const roleInput = document.getElementById('roleInput').value;
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
+            
+            if (!roleInput) {
+                e.preventDefault();
+                alert('Please select a role!');
+                return false;
+            }
+        });
     </script>
 }
 
