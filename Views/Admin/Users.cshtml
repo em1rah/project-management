@@ -97,36 +97,6 @@
         </div>
     </div>
 
-    <!-- Stats Footer -->
-    @if (Model.Count > 0)
-    {
-        <div class="row mt-5 g-3">
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm text-center p-3">
-                    <h5 class="text-muted mb-2">Total Users</h5>
-                    <h2 class="fw-bold" style="color: #667eea;">@Model.Count</h2>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm text-center p-3">
-                    <h5 class="text-muted mb-2">Cert. Interested</h5>
-                    <h2 class="fw-bold" style="color: #28a745;">@Model.Count(u => u.InterestedInCertification)</h2>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm text-center p-3">
-                    <h5 class="text-muted mb-2">Not Interested</h5>
-                    <h2 class="fw-bold" style="color: #dc3545;">@Model.Count(u => !u.InterestedInCertification)</h2>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm text-center p-3">
-                    <h5 class="text-muted mb-2">Conversion Rate</h5>
-                    <h2 class="fw-bold" style="color: #0dcaf0;">@Math.Round(Model.Count(u => u.InterestedInCertification) * 100.0 / Model.Count, 1)%</h2>
-                </div>
-            </div>
-        </div>
-    }
 </div>
 
 <style>
