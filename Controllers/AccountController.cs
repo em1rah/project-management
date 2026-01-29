@@ -61,7 +61,7 @@ public class AccountController : Controller
                 SchoolAttended = schoolattended,
                 Role = role,
                 CoursesInterested = coursesinterested ?? string.Empty,
-                InterestedInCertification = interestedincertification == "true",
+                InterestedInCertification = interestedincertification == "True" || interestedincertification == "true",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
