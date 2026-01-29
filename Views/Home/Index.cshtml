@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    @if (ViewBag.IsLoggedIn)
+    {
+        <h1 class="display-4">Welcome, @ViewBag.UserName!</h1>
+        <p class="lead">You are logged in as <strong>@ViewBag.UserType</strong></p>
+        
+        <div class="mt-4">
+            <p class="fs-5">Thank you for joining us. You can now access your dashboard and explore our courses.</p>
+            <div class="mt-4">
+                <a class="btn btn-primary btn-lg me-2" href="@Url.Action("Logout", "Account")">Logout</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome to Project Management</h1>
+        <p class="lead">Get started with your training journey</p>
+        
+        <div class="mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card mb-3 shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">New User?</h5>
+                            <p class="card-text">Create an account and start learning AWS courses.</p>
+                            <a href="@Url.Action("Signup", "Account")" class="btn btn-success btn-lg">Sign Up</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Already have an account?</h5>
+                            <p class="card-text">Sign in to your account and access your dashboard.</p>
+                            <a href="@Url.Action("Signin", "Account")" class="btn btn-primary btn-lg">Sign In</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

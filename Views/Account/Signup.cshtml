@@ -1,0 +1,172 @@
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Create Your Account</h2>
+                    
+                    <form method="post" asp-action="Signup" asp-controller="Account">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">Please fix the following errors:</h4>
+                                <ul class="mb-0">
+                                    @foreach (var modelState in ViewData.ModelState.Values)
+                                    {
+                                        @foreach (var error in modelState.Errors)
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label for="fullname" class="form-label">Full Name</label>
+                            <input type="text" name="fullname" id="fullname" class="form-control form-control-lg" placeholder="Enter your full name" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Enter password" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmpassword" class="form-label">Confirm Password</label>
+                            <input type="password" name="confirmpassword" id="confirmpassword" class="form-control form-control-lg" placeholder="Confirm password" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="schoolattended" class="form-label">School Attended</label>
+                            <input type="text" name="schoolattended" id="schoolattended" class="form-control form-control-lg" placeholder="Enter your school" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <div class="input-group mb-2">
+                                <select id="roleSelect" class="form-select form-select-lg" required>
+                                    <option value="">Select a role</option>
+                                    <option value="Business Analyst">Business Analyst</option>
+                                    <option value="Implementation Consultant">Implementation Consultant</option>
+                                    <option value="System Developer">System Developer</option>
+                                    <option value="Quality Assurance">Quality Assurance</option>
+                                    <option value="Other">Other (Specify)</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="role" id="roleInput" />
+                            <input type="text" id="customRole" class="form-control form-control-lg" placeholder="Specify your role" style="display: none;" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Courses Interested</label>
+                            <div class="form-check">
+                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Gen. AI" id="course1" />
+                                <label class="form-check-label" for="course1">AWS Gen. AI</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Cloud Practitioner" id="course2" />
+                                <label class="form-check-label" for="course2">AWS Cloud Practitioner</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input course-checkbox" type="checkbox" value="AWS Certified Solution Architect" id="course3" />
+                                <label class="form-check-label" for="course3">AWS Certified Solution Architect</label>
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="addCourseBtn">+ Add Other Course</button>
+                            </div>
+                            <div id="otherCoursesContainer" style="margin-top: 10px;"></div>
+                            <input type="hidden" name="coursesinterested" id="coursesInput" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Interested in Certification?</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="interestedincertification" value="true" id="certYes" required />
+                                <label class="form-check-label" for="certYes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="interestedincertification" value="false" id="certNo" />
+                                <label class="form-check-label" for="certNo">No</label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
+                        </div>
+
+                        <p class="text-center mt-3">
+                            Already have an account? <a asp-action="Signin" asp-controller="Account" class="text-decoration-none">Sign In</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let courseCount = 0;
+
+        // Role selection
+        document.getElementById('roleSelect').addEventListener('change', function() {
+            const customRole = document.getElementById('customRole');
+            const roleInput = document.getElementById('roleInput');
+            
+            if (this.value === 'Other') {
+                customRole.style.display = 'block';
+                customRole.required = true;
+            } else {
+                customRole.style.display = 'none';
+                customRole.required = false;
+                roleInput.value = this.value;
+            }
+        });
+
+        // Custom role input
+        document.getElementById('customRole').addEventListener('change', function() {
+            document.getElementById('roleInput').value = this.value;
+        });
+
+        // Add other course
+        document.getElementById('addCourseBtn').addEventListener('click', function() {
+            courseCount++;
+            const container = document.getElementById('otherCoursesContainer');
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control other-course" placeholder="Enter course name" />
+                    <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.parentElement.remove(); updateCourses();">Remove</button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        // Update courses
+        document.querySelectorAll('.course-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', updateCourses);
+        });
+
+        function updateCourses() {
+            const selected = [];
+            document.querySelectorAll('.course-checkbox:checked').forEach(checkbox => {
+                selected.push(checkbox.value);
+            });
+            document.querySelectorAll('.other-course').forEach(input => {
+                if (input.value) selected.push(input.value);
+            });
+            document.getElementById('coursesInput').value = selected.join(',');
+        }
+    </script>
+}
+

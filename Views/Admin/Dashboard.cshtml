@@ -1,0 +1,187 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="display-5">Admin Dashboard</h1>
+            <p class="text-muted">Welcome, @ViewBag.AdminName</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text display-4">@ViewBag.TotalUsers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Interested in Certification</h5>
+                    <p class="card-text display-4">@ViewBag.CertificationInterested</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-danger text-white shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Not Interested in Certification</h5>
+                    <p class="card-text display-4">@ViewBag.CertificationNotInterested</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Certification Interest</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="certificationChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">User Roles Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="rolesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses Chart -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Course Interest Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="coursesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a href="@Url.Action("Users", "Admin")" class="btn btn-primary">View All Users</a>
+            <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Certification Chart
+        const certCtx = document.getElementById('certificationChart').getContext('2d');
+        const certChart = new Chart(certCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Interested in Certification', 'Not Interested'],
+                datasets: [{
+                    data: [@ViewBag.CertificationInterested, @ViewBag.CertificationNotInterested],
+                    backgroundColor: [
+                        '#28a745',
+                        '#dc3545'
+                    ],
+                    borderColor: [
+                        '#fff',
+                        '#fff'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Roles Chart
+        const roles = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.RoleDistribution ?? new List<object>()));
+        const roleLabels = roles.map(r => r.role);
+        const roleCounts = roles.map(r => r.count);
+
+        const rolesCtx = document.getElementById('rolesChart').getContext('2d');
+        const rolesChart = new Chart(rolesCtx, {
+            type: 'bar',
+            data: {
+                labels: roleLabels,
+                datasets: [{
+                    label: 'Number of Users',
+                    data: roleCounts,
+                    backgroundColor: '#007bff',
+                    borderColor: '#0056b3',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Courses Chart
+        const courses = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Courses ?? new Dictionary<string, int>()));
+        const courseLabels = Object.keys(courses);
+        const courseCounts = Object.values(courses);
+
+        const coursesCtx = document.getElementById('coursesChart').getContext('2d');
+        const coursesChart = new Chart(coursesCtx, {
+            type: 'bar',
+            data: {
+                labels: courseLabels,
+                datasets: [{
+                    label: 'Number of Registrations',
+                    data: courseCounts,
+                    backgroundColor: '#17a2b8',
+                    borderColor: '#0c5460',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}
