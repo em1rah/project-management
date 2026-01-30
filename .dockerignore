@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+publish/
+node_modules/
+.vscode/
+.git/
+*.user
+*.suo
